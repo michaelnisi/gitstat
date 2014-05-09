@@ -1,0 +1,27 @@
+{
+  "name": "gitstat",
+  "version": "0.0.0",
+  "description": "stream git status of local repo",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "node tap --tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/michaelnisi/gitstat"
+  },
+  "keywords": [
+    "git",
+    "status",
+    "stream"
+  ],
+  "author": "Michael Nisi <michael.nisi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michaelnisi/gitstat/issues"
+  },
+  "homepage": "https://github.com/michaelnisi/gitstat"
+}
