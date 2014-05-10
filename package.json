@@ -7,7 +7,7 @@
     "example": "example"
   },
   "scripts": {
-    "test": "node tap --tap test/*.js"
+    "test": "tap --tap test/*tests.js"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,20 @@
     "status",
     "stream"
   ],
-  "author": "Michael Nisi <michael.nisi@gmail.com>",
+  "author": {
+    "name": "Michael Nisi",
+    "email": "michael.nisi@gmail.com",
+    "url": "http://michaelnisi.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/michaelnisi/gitstat/issues"
   },
-  "homepage": "https://github.com/michaelnisi/gitstat"
+  "homepage": "https://github.com/michaelnisi/gitstat",
+  "devDependencies": {
+    "tap": "0.4.x"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
 }
