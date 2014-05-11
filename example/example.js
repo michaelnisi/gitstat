@@ -1,7 +1,7 @@
 
 var gitstat = require('../'), changes
 
-changes = gitstat('.')
+changes = gitstat('.', 'M')
 changes.on('readable', function () {
   var chunk
   while (null !== (chunk = changes.read())) {

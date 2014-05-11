@@ -3,10 +3,6 @@
 
 module.exports = GitStat
 
-module.exports.ADDED = 1 << 0
-module.exports.MODIFIED = 1 << 1
-module.exports.DELETED = 1 << 2
-
 if (!!process.env.NODE_TEST) {
   module.exports.parse = parse
 }
@@ -19,7 +15,7 @@ function opts () {
 }
 
 function GitStat (repo, mode) {
-  if (!(this instanceof GitStat)) return new GitStat(repo)
+  if (!(this instanceof GitStat)) return new GitStat(repo, mode)
   stream.Readable.call(this, opts())
   this.repo = repo
   this.mode = mode
@@ -28,23 +24,31 @@ util.inherits(GitStat, stream.Readable)
 
 var StringDecoder = require('string_decoder').StringDecoder
 
+function ex (mode) {
+  return new RegExp(mode.split('').join('|'), 'g')
+}
+
 function parse (buf, mode) {
   var lines = new StringDecoder()
     .write(buf)
-    .split('\n')
+    .split('\0')
     .filter(function (line) {
       return !!line
     })
 
   var chunks = []
-  if (mode !== undefined) {
-    var strs, str
+  if (!!mode) {
+    var strs, status, filename
     lines.forEach(function (line) {
-      strs = line.split(' ')
-      str = strs[strs.length - 1]
-      if (str) chunks.push(str)
+      strs = line.split(' ').filter(function (str) {
+        return !!str
+      })
+      status = strs[0]
+      filename = strs[1]
+      if (ex(mode).test(status)) {
+        chunks.push(filename)
+      }
     })
-    chunks = ['hello']
   } else {
     chunks = lines
   }
@@ -61,7 +65,7 @@ var child_process = require('child_process')
 GitStat.prototype._read = function (size) {
   var chunks = this.chunks
   if (!chunks) {
-    var cmd = 'git status --porcelain'
+    var cmd = 'git status -uno -z'
       , o = psopts(this.repo)
       , me = this
     child_process.exec(cmd, o, function (er, stdout, stderr) {

@@ -1,6 +1,6 @@
 # gitstat - stream git status
 
-The gitstat [Node.js](http://nodejs.org/) module provides a readable streamof added and changed files in a local git repository.
+The gitstat [Node.js](http://nodejs.org/) module provides a stream of file statuses of a local git repository.
 
 [![Build Status](https://secure.travis-ci.org/michaelnisi/gitstat.png)](http://travis-ci.org/michaelnisi/gitstat)
 
@@ -20,7 +20,10 @@ changes.on('readable', function () {
 
 ## API
 
-### gitstat(repo)
+### gitstat(repo, mode)
+
+- repo the path to the repository
+- mode the mode is M|A|D|R|C|U|?|! (default `undefined`)
 
 ## Installation
 

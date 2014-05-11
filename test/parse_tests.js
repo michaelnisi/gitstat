@@ -9,14 +9,35 @@ function p (mode, input, wanted, t) {
 
 test('raw', function (t) {
   p(null
-  , ' M example/example.js\n M index.js\n?? test/\n'
-  , [' M example/example.js', ' M index.js', '?? test/']
+  , 'A  a\0A  b\0A  c'
+  , ['A  a', 'A  b', 'A  c']
   , t)
 })
 
 test('added', function (t) {
-  p(gitstat.ADDED | gitstat.MODIFIED
-  , 'M  example/example.js\nAM test/parse_tests.js'
-  , ['example/example.js', 'test/parse_tests.js']
+  p('A'
+  , 'A  a\0A  b\0AM c'
+  , ['a', 'b', 'c']
+  , t)
+})
+
+test('modified', function (t) {
+  p('M'
+  , 'A  a\0A  b\0AM c'
+  , ['c']
+  , t)
+})
+
+test('added and/or modfied', function (t) {
+  p('AM'
+  , 'A  a\0A  b\0AM c'
+  , ['a', 'b', 'c']
+  , t)
+})
+
+test('deleted', function (t) {
+  p('D'
+  , 'D  a\0A  b\0AM c'
+  , ['a']
   , t)
 })
