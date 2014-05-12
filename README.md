@@ -1,22 +1,30 @@
 # gitstat - stream git status
 
-The gitstat [Node.js](http://nodejs.org/) module provides a stream of local [Git](http://git-scm.com/) file status information.
+The *gitstat* [Node](http://nodejs.org/) module streams paths of changed files already added to a local [Git](http://git-scm.com/) repository.
 
-[![Build Status](https://secure.travis-ci.org/michaelnisi/gitstat.png)](http://travis-ci.org/michaelnisi/gitstat)
+[![Build Status](https://travis-ci.org/michaelnisi/gitstat.svg)](http://travis-ci.org/michaelnisi/gitstat) [![David DM](https://david-dm.org/michaelnisi/gitstat.svg)](http://david-dm.org/michaelnisi/gitstat)
 
 ## Usage
 
+Read orginal output of the internally executed `git status -uno -z ` file by file:
 ```js    
-var gitstat = require('gitstat'), changes
+var gitstat = require('gitstat'), status
 
-changes = gitstat('.')
-// changes = gitstat('.', 'AM')
-changes.on('readable', function () {
+status = gitstat('.')
+status.on('readable', function () {
   var chunk
-  while (null !== (chunk = changes.read())) {
+  while (null !== (chunk = status.read())) {
     console.log('%s', chunk)
   }
 })
+```
+
+Pipe filenames of `ADDED` and/or `MODIFIED` files:
+```js
+var gitstat = require('gitstat')
+
+gitstat('.', 'AM')
+  .pipe(process.stdout)
 ```
 
 ## types
@@ -27,20 +35,20 @@ The path to the local git repository.
 
 ### mode()
 
-An optional [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) to configure which filenames should be emitted (`"M|A|D|R|C|U|?|!"`). For example:
+Optionally configure which filenames should be emitted by passing Git statuses (`"M|A|D|R|C|U"`) as String of undefined length. For example:
 
 ```js
 gitstat('.', 'AM')
 ```
 … would return a Stream that emits filenames of all added and/or modified files. 
 
-With the default mode (`undefined`), not filenames, but the original output of `git status -uno -z` is emitted line by line. For details please refer to [`man git-status`](http://git-scm.com/docs/git-status).
+With the default mode (`undefined`), not filenames, but the original output of `git status -uno -z` is emitted file by file. For details please refer to [`man git-status`](http://git-scm.com/docs/git-status).
 
 ## exports
 
 ### gitstat(repo(), [mode()])
 
-A [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable) stream of [Git](http://git-scm.com/) file status information.
+This function returns a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable) stream. On the first read this stream executes `git status -uno -z` and emits paths according to mode. Files not added to the repository are ignored. 
 
 ## Installation
 

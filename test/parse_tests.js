@@ -41,3 +41,12 @@ test('deleted', function (t) {
   , ['a']
   , t)
 })
+
+// Issues
+
+test('mutliple modifieds', function (t) {
+  p('M'
+  , ' M about.html\0 M archive.html\0 M index.html'
+  , ['about.html', 'archive.html', 'index.html']
+  , t)
+})

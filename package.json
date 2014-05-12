@@ -1,7 +1,7 @@
 {
   "name": "gitstat",
   "version": "0.0.1",
-  "description": "stream git status of local repo",
+  "description": "stream git status",
   "main": "index.js",
   "directories": {
     "example": "example"
@@ -29,7 +29,9 @@
   },
   "homepage": "https://github.com/michaelnisi/gitstat",
   "devDependencies": {
-    "tap": "0.4.x"
+    "tap": "0.4.x",
+    "rimraf": "2.2.x",
+    "event-stream": "3.1.x"
   },
   "engines": {
     "node": ">=0.10"
