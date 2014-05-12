@@ -1,6 +1,6 @@
 # gitstat - stream git status
 
-The *gitstat* [Node](http://nodejs.org/) module streams paths of changed files tracked by a local [Git](http://git-scm.com/) repository.
+The `gitstat` [Node](http://nodejs.org/) module streams paths of changed files tracked by a local [Git](http://git-scm.com/) repository.
 
 [![Build Status](https://travis-ci.org/michaelnisi/gitstat.svg)](http://travis-ci.org/michaelnisi/gitstat) [![David DM](https://david-dm.org/michaelnisi/gitstat.svg)](http://david-dm.org/michaelnisi/gitstat)
 
@@ -19,7 +19,7 @@ status.on('readable', function () {
 })
 ```
 
-Pipe filenames of `ADDED` and/or `MODIFIED` files:
+Pipe filenames of added and/or modified files:
 ```js
 var gitstat = require('gitstat')
 
@@ -48,7 +48,7 @@ With the default mode (`undefined`), not filenames, but the original output of `
 
 ### gitstat(repo(), [mode()])
 
-This function returns a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable) stream. On the first read this stream executes `git status -uno -z` and emits paths according to mode. Files not added to the repository are ignored. 
+This function returns a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable) stream. On the first read this stream executes `git status -uno -z` and emits paths according to mode. Untracked files are ignored. 
 
 ## Installation
 
