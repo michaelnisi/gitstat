@@ -1,12 +1,12 @@
 # gitstat - stream git status
 
-The *gitstat* [Node](http://nodejs.org/) module streams paths of changed files already added to a local [Git](http://git-scm.com/) repository.
+The *gitstat* [Node](http://nodejs.org/) module streams paths of changed files tracked by a local [Git](http://git-scm.com/) repository.
 
 [![Build Status](https://travis-ci.org/michaelnisi/gitstat.svg)](http://travis-ci.org/michaelnisi/gitstat) [![David DM](https://david-dm.org/michaelnisi/gitstat.svg)](http://david-dm.org/michaelnisi/gitstat)
 
 ## Usage
 
-Read orginal output of the internally executed `git status -uno -z ` file by file:
+Read orginal output of the underlying `git status -uno -z` file by file:
 ```js    
 var gitstat = require('gitstat'), status
 
