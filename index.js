@@ -69,7 +69,7 @@ GitStat.prototype._read = function (size) {
       , o = psopts(this.repo)
       , me = this
     child_process.exec(cmd, o, function (er, stdout, stderr) {
-      assert(!er)
+      assert(!er, er ? er.message : undefined)
       chunks = parse(stdout, me.mode)
       me.chunks = chunks
       me.next()
