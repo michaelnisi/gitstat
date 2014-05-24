@@ -52,7 +52,7 @@ This function returns a [Readable](http://nodejs.org/api/stream.html#stream_clas
 
 ## Installation
 
-[![NPM](https://nodei.co/npm/gitstat.png)](https://npmjs.org/package/gitstat)
+[![NPM](https://nodei.co/npm/gitstat.svg)](https://npmjs.org/package/gitstat)
 
 ## License
 
