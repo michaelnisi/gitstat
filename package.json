@@ -1,13 +1,13 @@
 {
   "name": "gitstat",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "stream git status",
   "main": "index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "test": "export NODE_TEST=1 ; tap --tap test/*tests.js"
+    "test": "export NODE_TEST=1 ; tap --tap test/*.js"
   },
   "repository": {
     "type": "git",

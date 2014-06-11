@@ -2,7 +2,12 @@
 var test = require('tap').test
   , fs = require('fs')
   , child_process = require('child_process')
-  , dir = '/tmp/gitstat-' + Math.floor(Math.random() * (1<<24))
+  , gitstat = require('../')
+  , es = require('event-stream')
+  , rimraf = require('rimraf').sync
+  ;
+
+var dir = '/tmp/gitstat-' + Math.floor(Math.random() * (1<<24))
 
 function opts () {
   return { cwd:dir, env:process.env }
@@ -15,8 +20,8 @@ function exec (cmd, cb) {
 }
 
 test('setup', function (t) {
-  t.plan(1)
   fs.mkdirSync(dir, 0700)
+  t.plan(2)
   t.ok(fs.statSync(dir).isDirectory())
   exec('git init ; touch a b c', function (er) {
     t.ok(!er)
@@ -24,11 +29,7 @@ test('setup', function (t) {
   })
 })
 
-var gitstat = require('../')
-  , es = require('event-stream')
-
 function stat (mode, wanted, t) {
-  t.plan(2)
   gitstat(dir, mode)
     .pipe(es.writeArray(function (er, found) {
       t.ok(!er)
@@ -39,6 +40,7 @@ function stat (mode, wanted, t) {
 
 test('added (no mode)', function (t) {
   exec('git add .', function (er) {
+    t.ok(!er)
     stat(null, ['A  a', 'A  b', 'A  c'], t)
   })
 })
@@ -71,9 +73,8 @@ test('rename', function (t) {
   })
 })
 
-var rimraf = require('rimraf').sync
-
 test('teardown', function (t) {
+  t.end()
   t.plan(1)
   rimraf(dir)
   fs.stat(dir, function (er) {
