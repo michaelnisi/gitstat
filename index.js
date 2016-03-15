@@ -1,47 +1,35 @@
-
 // gitstat - stream git status
 
 module.exports = GitStat
 
-if (!!process.env.NODE_TEST) {
-  module.exports.parse = parse
-}
-
-var assert = require('assert')
-  , child_process = require('child_process')
-  , stream = require('stream')
-  , string_decoder = require('string_decoder')
-  , util = require('util')
-  ;
-
-function opts () {
-  return { encoding:'utf8', highWaterMark:0 }
-}
+var child_process = require('child_process')
+var stream = require('readable-stream')
+var string_decoder = require('string_decoder')
+var util = require('util')
 
 function GitStat (repo, mode) {
   if (!(this instanceof GitStat)) return new GitStat(repo, mode)
-  stream.Readable.call(this, opts())
+
+  var opts = { encoding: 'utf8', highWaterMark: 0 }
+  stream.Readable.call(this, opts)
+
   this.repo = repo
   this.mode = mode
   this.decoder = new string_decoder.StringDecoder()
 }
 util.inherits(GitStat, stream.Readable)
 
-
 function ex (mode) {
   return new RegExp(mode.split('').join('|'), 'g')
 }
 
 function parse (decoder, buf, mode) {
-  var lines = decoder
-    .write(buf)
-    .split('\0')
-    .filter(function (line) {
-      return !!line
-    })
+  var lines = decoder.write(buf).split('\0').filter(function (line) {
+    return !!line
+  })
 
   var chunks = []
-  if (!!mode) {
+  if (mode) {
     var strs, status, filename
     lines.forEach(function (line) {
       strs = line.split(' ').filter(function (str) {
@@ -60,18 +48,21 @@ function parse (decoder, buf, mode) {
 }
 
 function psopts (cwd) {
-  return { cwd:cwd, env:process.env }
+  return { cwd: cwd, env: process.env }
 }
 
 GitStat.prototype._read = function (size) {
   var chunks = this.chunks
   if (!chunks) {
     var cmd = 'git status -uno -z'
-      , o = psopts(this.repo)
-      , me = this
-      ;
+    var o = psopts(this.repo)
+    var me = this
+
     child_process.exec(cmd, o, function (er, stdout, stderr) {
-      assert(!er, er ? er.message : undefined)
+      if (er instanceof Error) {
+        me.emit('error', er)
+        return me.push(null)
+      }
       chunks = parse(me.decoder, stdout, me.mode)
       me.chunks = chunks
       me.next()
@@ -82,5 +73,11 @@ GitStat.prototype._read = function (size) {
 }
 
 GitStat.prototype.next = function () {
-  this.push(this.chunks.shift())
+  var chunk = this.chunks.shift()
+  if (chunk === undefined) chunk = null
+  this.push(chunk)
+}
+
+if (parseInt(process.env.NODE_TEST, 10) === 1) {
+  module.exports.parse = parse
 }

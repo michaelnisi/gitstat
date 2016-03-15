@@ -1,10 +1,13 @@
+var gitstat = require('../')
 
-var gitstat = require('../'), changes
-
-changes = gitstat('.', 'M')
+var changes = gitstat('.', 'M')
 changes.on('readable', function () {
   var chunk
-  while (null !== (chunk = changes.read())) {
+  while ((chunk = changes.read()) !== null) {
     console.log('changed file %s', chunk)
   }
+})
+
+changes.on('end', function () {
+  console.log('done')
 })

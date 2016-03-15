@@ -1,8 +1,6 @@
-
 var test = require('tap').test
-  , gitstat = require('../')
-  , string_decoder = require('string_decoder')
-  ;
+var gitstat = require('../')
+var string_decoder = require('string_decoder')
 
 function p (mode, input, wanted, t) {
   t.deepEqual(gitstat.parse(

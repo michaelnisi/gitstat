@@ -1,13 +1,14 @@
 {
   "name": "gitstat",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "stream git status",
   "main": "index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "test": "export NODE_TEST=1 ; tap --tap test/*.js"
+    "pretest": "standard",
+    "test": "NODE_TEST=1 tap -b test/*.js"
   },
   "repository": {
     "type": "git",
@@ -29,11 +30,15 @@
   },
   "homepage": "https://github.com/michaelnisi/gitstat",
   "devDependencies": {
-    "tap": "0.4.x",
-    "rimraf": "2.2.x",
-    "event-stream": "3.1.x"
+    "event-stream": "^3.3.2",
+    "rimraf": "^2.5.2",
+    "standard": "^6.0.8",
+    "tap": "^5.7.0"
   },
   "engines": {
     "node": ">=0.10"
+  },
+  "dependencies": {
+    "readable-stream": "^2.0.6"
   }
 }

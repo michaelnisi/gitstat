@@ -1,16 +1,16 @@
+// gitstat_tests - test gitstat
 
+var child_process = require('child_process')
+var es = require('event-stream')
+var fs = require('fs')
+var gitstat = require('../')
+var rimraf = require('rimraf').sync
 var test = require('tap').test
-  , fs = require('fs')
-  , child_process = require('child_process')
-  , gitstat = require('../')
-  , es = require('event-stream')
-  , rimraf = require('rimraf').sync
-  ;
 
-var dir = '/tmp/gitstat-' + Math.floor(Math.random() * (1<<24))
+var dir = '/tmp/gitstat-' + Math.floor(Math.random() * (1 << 24))
 
 function opts () {
-  return { cwd:dir, env:process.env }
+  return { cwd: dir, env: process.env }
 }
 
 function exec (cmd, cb) {
@@ -20,7 +20,7 @@ function exec (cmd, cb) {
 }
 
 test('setup', function (t) {
-  fs.mkdirSync(dir, 0700)
+  fs.mkdirSync(dir)
   t.plan(2)
   t.ok(fs.statSync(dir).isDirectory())
   exec('git init ; touch a b c', function (er) {
@@ -74,7 +74,6 @@ test('rename', function (t) {
 })
 
 test('teardown', function (t) {
-  t.end()
   t.plan(1)
   rimraf(dir)
   fs.stat(dir, function (er) {
